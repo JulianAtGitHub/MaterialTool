@@ -17,17 +17,23 @@ public:
     GLSystem(void);
     virtual ~GLSystem(void);
 
-    bool LoadTexture(TextureInfo &texture, const QString &imageFile, bool mipmaps = true);
+    bool CreateTexture(TextureInfo &textureInfo, const QString &imageFile, bool mipmaps = true);
     // mipmaps is disabled when load  from HDR image
-    bool LoadHDRTexture(TextureInfo &texture, const QString &imageFile);
+    bool CreateHDRTexture(TextureInfo &textureInfo, const QString &imageFile);
+    bool CreateProgram(uint &program, const QString &vsFile, const QString &fsFile, const QStringList &macros);
+    bool CreateBufferObject(uint &object, QVector<float> &data);
+    bool CreateBufferObject(uint &object, QVector<short> &data, bool isElement = true);
+    bool CreateVertexObjects(VertexInfo &vertex, FloatData &vertices, ShortData &indices);
 
-    bool LoadProgram(uint &program, const QString &vsFile, const QString &fsFile, const QStringList &macros);
+    bool CheckError(void);
+    bool CheckFramebufferStatus(void);
 
 private:
     void GetSystemInfo(void);
     bool ReadTextFile(QByteArray &content, const QString &filePath);
     // type:  GL_VERTEX_SHADER or GL_FRAGMENT_SHADER
     bool LoadShader(uint &shader, uint type, QByteArray &source, QByteArray &header);
+    bool CreateBufferObject(uint &object, const void *data, int size, bool isElement);
 
 private:
     QString _vendor;

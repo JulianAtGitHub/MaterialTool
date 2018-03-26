@@ -17,24 +17,24 @@ GLSystem::~GLSystem(void) {
 }
 
 void GLSystem::GetSystemInfo(void) {
-    _vendor = glGetString(GL_VENDOR);
-    _renderer = glGetString(GL_RENDERER);
-    _version = glGetString(GL_VERSION);
-    _glslVersion = glGetString(GL_SHADING_LANGUAGE_VERSION);
+    _vendor = (const char *)glGetString(GL_VENDOR);
+    _renderer = (const char *)glGetString(GL_RENDERER);
+    _version = (const char *)glGetString(GL_VERSION);
+    _glslVersion = (const char *)glGetString(GL_SHADING_LANGUAGE_VERSION);
 
-    QString extensions = glGetString(GL_EXTENSIONS);
+    QString extensions = (const char *)glGetString(GL_EXTENSIONS);
     _extensions = extensions.split(" ", QString::SkipEmptyParts);
 
-    qInfo << "vendor:       " << _vendor;
-    qInfo << "renderer:     " << _renderer;
-    qInfo << "version:      " << _version;
-    qInfo << "glsl version: " << _glslVersion;
-    qInfo << "extensions:   " << extensions;
+    qInfo("vendor:       %s", _vendor.toUtf8().data());
+    qInfo("renderer:     %s", _renderer.toUtf8().data());
+    qInfo("version:      %s", _version.toUtf8().data());
+    qInfo("glsl version: %s", _glslVersion.toUtf8().data());
+    qInfo("extensions:   %s", extensions.toUtf8().data());
 }
 
-bool GLSystem::LoadTexture(TextureInfo &textureInfo, const QString &imageFile, bool mipmaps) {
-    if (imagePath.isEmpty()) {
-        qCritical << "GLSystem::CreateTexture image path is empty!";
+bool GLSystem::CreateTexture(TextureInfo &textureInfo, const QString &imageFile, bool mipmaps) {
+    if (imageFile.isEmpty()) {
+        qCritical("GLSystem::CreateTexture image path is empty!");
         return false;
     }
 
@@ -42,7 +42,7 @@ bool GLSystem::LoadTexture(TextureInfo &textureInfo, const QString &imageFile, b
     std::string filePath = imageFile.toStdString();
     uchar *data = stbi_load(filePath.c_str(), &width, &height, &nComponent, 0);
     if (!data) {
-        qCritical << "GLSystem::CreateTexture load image " << imageFile << " failed!";
+        qCritical("GLSystem::CreateTexture load image %s failed!", imageFile.toUtf8().data());
         return false;
     }
 
@@ -57,7 +57,7 @@ bool GLSystem::LoadTexture(TextureInfo &textureInfo, const QString &imageFile, b
         case 3: internalFormat = GL_RGB; srcFormat = GL_RGB; break;
         case 4: internalFormat = GL_RGBA; srcFormat = GL_RGBA; break;
         default:
-            qCritical << "GLSystem::CreateTexture image format not support!";
+            qCritical("GLSystem::CreateTexture image format not support!");
             return false;
     }
 
@@ -89,9 +89,9 @@ bool GLSystem::LoadTexture(TextureInfo &textureInfo, const QString &imageFile, b
     return true;
 }
 
-bool GLSystem::LoadHDRTexture(TextureInfo &texture, const QString &imageFile) {
-    if (imagePath.isEmpty()) {
-        qCritical << "GLSystem::LoadHDRTexture image path is empty!";
+bool GLSystem::CreateHDRTexture(TextureInfo &textureInfo, const QString &imageFile) {
+    if (imageFile.isEmpty()) {
+        qCritical("GLSystem::CreateHDRTexture image path is empty!");
         return false;
     }
 
@@ -99,7 +99,7 @@ bool GLSystem::LoadHDRTexture(TextureInfo &texture, const QString &imageFile) {
     std::string filePath = imageFile.toStdString();
     float *data = stbi_loadf(filePath.c_str(), &width, &height, &nComponent, 0);
     if (!data) {
-        qCritical << "GLSystem::LoadHDRTexture load image " << imageFile << " failed!";
+        qCritical("GLSystem::CreateHDRTexture load image %s failed!", imageFile.toUtf8().data());
         return false;
     }
 
@@ -132,7 +132,7 @@ bool GLSystem::LoadHDRTexture(TextureInfo &texture, const QString &imageFile) {
 
 bool GLSystem::ReadTextFile(QByteArray &content, const QString &filePath) {
     if (filePath.isEmpty()) {
-        qCritical << "GLSystem::ReadTextFile file path is empty!";
+        qCritical("GLSystem::ReadTextFile file path is empty!");
         return false;
     }
 
@@ -140,7 +140,7 @@ bool GLSystem::ReadTextFile(QByteArray &content, const QString &filePath) {
 
     QFile file(filePath);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qCritical << "GLSystem::ReadTextFile can not open file:" << filePath;
+        qCritical("GLSystem::ReadTextFile can not open file:%s", filePath.toUtf8().data());
         return false;
     }
 
@@ -153,12 +153,12 @@ bool GLSystem::ReadTextFile(QByteArray &content, const QString &filePath) {
 
 bool GLSystem::LoadShader(uint &shader, uint type, QByteArray &source, QByteArray &header) {
     if (source.isEmpty()) {
-        qCritical << "GLSystem::LoadShader shader source is empty!";
+        qCritical("GLSystem::LoadShader shader source is empty!");
         return false;
     }
 
     if (type != GL_VERTEX_SHADER && type != GL_FRAGMENT_SHADER) {
-        qCritical << "GLSystem::LoadShader unknown shader type!";
+        qCritical("GLSystem::LoadShader unknown shader type!");
         return false;
     }
 
@@ -177,7 +177,7 @@ bool GLSystem::LoadShader(uint &shader, uint type, QByteArray &source, QByteArra
         char *log = new char[maxLength];
         glGetShaderInfoLog(shader, maxLength, &logLength, log);
 
-        qCritical << "GLSystem::LoadShader shader compile with error:" << log;
+        qCritical("GLSystem::LoadShader shader compile with error:%s", log);
         delete [] log;
 
         glDeleteShader(shader);
@@ -188,9 +188,9 @@ bool GLSystem::LoadShader(uint &shader, uint type, QByteArray &source, QByteArra
     return true;
 }
 
-bool GLSystem::LoadProgram(uint &program, const QString &vsFile, const QString &fsFile, const QStringList &macros) {
+bool GLSystem::CreateProgram(uint &program, const QString &vsFile, const QString &fsFile, const QStringList &macros) {
     if (vsFile.isEmpty() || fsFile.isEmpty()) {
-        qCritical << "GLSystem::LoadProgram invalid shader file path!";
+        qCritical("GLSystem::CreateProgram invalid shader file path!");
         return false;
     }
 
@@ -198,7 +198,7 @@ bool GLSystem::LoadProgram(uint &program, const QString &vsFile, const QString &
     QByteArray vsSource;
     QByteArray fsSource;
     if (!ReadTextFile(vsSource, vsFile) || !ReadTextFile(fsSource, fsFile)) {
-        qCritical << "GLSystem::LoadProgram failed when read shader file!";
+        qCritical("GLSystem::CreateProgram failed when read shader file!");
         return false;
     }
 
@@ -215,7 +215,7 @@ bool GLSystem::LoadProgram(uint &program, const QString &vsFile, const QString &
     uint fragmentShader;
     if (!LoadShader(vertexShader, GL_VERTEX_SHADER, vsSource, header)
         || !LoadShader(fragmentShader, GL_FRAGMENT_SHADER, fsSource, header)) {
-        qCritical << "GLSystem::LoadProgram Load shader failed!";
+        qCritical("GLSystem::CreateProgram Load shader failed!");
         return false;
     }
 
@@ -234,7 +234,7 @@ bool GLSystem::LoadProgram(uint &program, const QString &vsFile, const QString &
         char *log = new char[maxLength];
         glGetProgramInfoLog(program, maxLength, &logLength, log);
 
-        qCritical << "GLSystem::LoadProgram shader link with error:" << log;
+        qCritical("GLSystem::CreateProgram shader link with error:%s", log);
         delete [] log;
 
         glDeleteShader(vertexShader);
@@ -245,4 +245,128 @@ bool GLSystem::LoadProgram(uint &program, const QString &vsFile, const QString &
     }
 
     return true;
+}
+
+bool GLSystem::CreateBufferObject(uint &object, const void *data, int size, bool isElement) {
+    if (data == nullptr || size == 0) {
+        qCritical("GLSystem::CreateBufferObject buffer data is empty!");
+        return false;
+    }
+
+    uint target = isElement ? GL_ELEMENT_ARRAY_BUFFER : GL_ARRAY_BUFFER;
+
+    glGenBuffers(1, &object);
+    glBindBuffer(target, object);
+    glBufferData(target, size, data, GL_STATIC_DRAW);
+
+    glBindBuffer(target, 0);
+    return true;
+}
+
+bool GLSystem::CreateBufferObject(uint &object, QVector<float> &data) {
+    return CreateBufferObject(object, data.constData(), data.size() * sizeof(float), false);
+}
+
+bool GLSystem::CreateBufferObject(uint &object, QVector<short> &data, bool isElement) {
+    return CreateBufferObject(object, data.constData(), data.size() * sizeof(short), isElement);
+}
+
+bool GLSystem::CreateVertexObjects(VertexInfo &vertex, FloatData &vertices, ShortData &indices) {
+    if (vertices.data.size() == 0) {
+        qCritical("GLSystem::CreateVertexObjects vertex data is empty!");
+        return false;
+    }
+
+    CreateBufferObject(vertex.vbo, vertices.data);
+    if (indices.data.size() > 0) {
+        CreateBufferObject(vertex.ebo, indices.data, true);
+    } else {
+        vertex.ebo = 0;
+    }
+
+    glGenVertexArrays(1, &vertex.vao);
+    glBindVertexArray(vertex.vao);
+    glBindBuffer(GL_ARRAY_BUFFER, vertex.vbo);
+
+    int szFloat = sizeof(float);
+
+    int stride = 0;
+    for (int i = 0; i < vertices.layouts.count(); ++i) {
+        const DataLayout &layout = vertices.layouts[i];
+        switch(layout.type) {
+            case Float: stride += szFloat; break;
+            case Float2: stride += 2 * szFloat; break;
+            case Float3: stride += 3 * szFloat; break;
+            case Float4: stride += 4 * szFloat; break;
+            default:
+                qWarning("Invalod layout data type of vertices, type:%d", layout.type);
+                break;
+        }
+    }
+
+    size_t offset = 0;
+    for (int i = 0; i < vertices.layouts.count(); ++i) {
+        const DataLayout &layout = vertices.layouts[i];
+        glEnableVertexAttribArray(layout.usage);
+
+        int nComponent = 0;
+        switch(layout.type) {
+            case Float: nComponent = 1; break;
+            case Float2: nComponent = 2; break;
+            case Float3: nComponent = 3; break;
+            case Float4: nComponent = 4; break;
+            default:
+                qWarning("Invalod layout data type of vertices, type:%d", layout.type);
+                break;
+        }
+        glVertexAttribPointer(layout.usage, nComponent, GL_FLAT, GL_FALSE, stride, (const void *)offset);
+
+        offset += nComponent * szFloat;
+    }
+
+    if (vertex.ebo != 0) {
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vertex.ebo);
+    }
+
+    glBindVertexArray(0);
+
+    vertex.count = vertex.ebo != 0 ? indices.data.size() : vertices.data.size() / (stride / szFloat);
+    vertex.layouts = vertices.layouts;
+
+    return true;
+}
+
+bool GLSystem::CheckError(void) {
+    uint error = glGetError();
+    switch (error) {
+      case GL_NO_ERROR: qInfo("NO_ERROR"); return true;
+      case GL_INVALID_ENUM: qWarning("INVALID_ENUM"); break;
+      case GL_INVALID_VALUE: qWarning("INVALID_VALUE"); break;
+      case GL_INVALID_OPERATION: qWarning("INVALID_OPERATION"); break;
+      case GL_INVALID_FRAMEBUFFER_OPERATION: qWarning("INVALID_FRAMEBUFFER_OPERATION"); break;
+      case GL_OUT_OF_MEMORY: qWarning("OUT_OF_MEMORY"); break;
+      default: qWarning("OpenGL Error:%d", error); break;
+    }
+
+    return false;
+}
+
+bool GLSystem::CheckFramebufferStatus(void) {
+    uint status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    switch(status) {
+        case GL_FRAMEBUFFER_COMPLETE: qInfo("FRAMEBUFFER_COMPLETE"); return true;
+        case GL_FRAMEBUFFER_UNDEFINED: qWarning("FRAMEBUFFER_UNDEFINED"); break;
+        case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT: qWarning("FRAMEBUFFER_INCOMPLETE_ATTACHMENT"); break;
+        case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT: qWarning("FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT"); break;
+        case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER: qWarning("FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER"); break;
+        case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER: qWarning("FRAMEBUFFER_INCOMPLETE_READ_BUFFER"); break;
+        case GL_FRAMEBUFFER_UNSUPPORTED: qWarning("FRAMEBUFFER_UNSUPPORTED"); break;
+        case GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE: qWarning("FRAMEBUFFER_INCOMPLETE_MULTISAMPLE"); break;
+        case GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS: qWarning("FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS"); break;
+        default: qWarning("Frame Buffer status error:%d", status); break;
+    }
+
+    return false;
+}
+
 }
