@@ -22,17 +22,25 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+DEFINES += STB_IMAGE_IMPLEMENTATION
+
+INCLUDEPATH += \
+    $$PWD/Vendors/glm \
+    $$PWD/Vendors/stb
 
 SOURCES += \
-        main.cpp \
-        MTWindow.cpp \
+    main.cpp \
+    MTWindow.cpp \
     MTPreview.cpp \
-    MTFlowview.cpp
+    MTFlowview.cpp \
+    Render/GLSystem.cpp
 
 HEADERS += \
-        MTWindow.h \
+    MTWindow.h \
     MTPreview.h \
-    MTFlowview.h
+    MTFlowview.h \
+    Render/GLSystem.h \
+    Render/Interfaces.h
 
 FORMS += \
         MTWindow.ui
