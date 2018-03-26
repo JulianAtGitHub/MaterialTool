@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MTWindow</class>
+ <widget class="QMainWindow" name="MTWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>970</width>
+    <height>499</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>MTWindow</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <widget class="MTPreview" name="Preview">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>300</width>
+      <height>200</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="MTFlowview" name="Flowview">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>10</y>
+      <width>640</width>
+      <height>480</height>
+     </rect>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>MTPreview</class>
+   <extends>QOpenGLWidget</extends>
+   <header>MTPreview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>MTFlowview</class>
+   <extends>QOpenGLWidget</extends>
+   <header>MTFlowview.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
