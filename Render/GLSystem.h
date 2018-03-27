@@ -2,6 +2,7 @@
 #define MTR_GLSYSTEM_H
 
 #include <QtGlobal>
+#include <QObject>
 #include <QStringList>
 #include <QByteArray>
 #include <QOpenGLFunctions_3_3_Core>
@@ -10,13 +11,19 @@
 
 namespace mtr {
 
-class GLSystem : public QOpenGLFunctions_3_3_Core {
+class GLSystem : public QObject, public QOpenGLFunctions_3_3_Core {
     static const char *ShaderVersion;
+    Q_OBJECT
 
 public:
-    GLSystem(void);
+    explicit GLSystem(QObject *parent = nullptr);
     virtual ~GLSystem(void);
 
+signals:
+
+public slots:
+
+public:
     bool CreateTexture(TextureInfo &textureInfo, const QString &imageFile, bool mipmaps = true);
     // mipmaps is disabled when load  from HDR image
     bool CreateHDRTexture(TextureInfo &textureInfo, const QString &imageFile);

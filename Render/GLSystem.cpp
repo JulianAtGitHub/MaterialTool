@@ -7,7 +7,8 @@ namespace mtr {
 
 const char * GLSystem::ShaderVersion = "#version 330 core";
 
-GLSystem::GLSystem(void)
+GLSystem::GLSystem(QObject *parent):
+QObject(parent)
 {
     initializeOpenGLFunctions();
 }
@@ -39,8 +40,8 @@ bool GLSystem::CreateTexture(TextureInfo &textureInfo, const QString &imageFile,
     }
 
     int width, height, nComponent;
-    std::string filePath = imageFile.toStdString();
-    uchar *data = stbi_load(filePath.c_str(), &width, &height, &nComponent, 0);
+    QByteArray filePath = imageFile.toUtf8();
+    uchar *data = stbi_load(filePath.data(), &width, &height, &nComponent, 0);
     if (!data) {
         qCritical("GLSystem::CreateTexture load image %s failed!", imageFile.toUtf8().data());
         return false;
@@ -96,8 +97,8 @@ bool GLSystem::CreateHDRTexture(TextureInfo &textureInfo, const QString &imageFi
     }
 
     int width, height, nComponent;
-    std::string filePath = imageFile.toStdString();
-    float *data = stbi_loadf(filePath.c_str(), &width, &height, &nComponent, 0);
+    QByteArray filePath = imageFile.toUtf8();
+    float *data = stbi_loadf(filePath.data(), &width, &height, &nComponent, 0);
     if (!data) {
         qCritical("GLSystem::CreateHDRTexture load image %s failed!", imageFile.toUtf8().data());
         return false;
@@ -206,8 +207,7 @@ bool GLSystem::CreateProgram(uint &program, const QString &vsFile, const QString
     QByteArray header(ShaderVersion);
     header.push_back("\n");
     foreach (const QString macro, macros) {
-        std::string str = macro.toStdString();
-        header.push_back(str.c_str());
+        header.push_back(macro.toUtf8());
         header.push_back("\n");
     }
 
