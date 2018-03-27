@@ -28,6 +28,21 @@ enum DataUsage {
     index
 };
 
+enum UniformUsage {
+    viewProjMatrix,
+    modelMatrix,
+    normalMatrix,
+    viewMatrix,
+    projMatrix,
+    viewPos,
+    lightPos,
+    lightColor,
+    albedo,
+    metallic,
+    roughness,
+    ao,
+};
+
 enum TextureType {
     Texture2D,
     TextureCube,
@@ -68,6 +83,17 @@ struct VertexInfo {
     // Vertex count if ebo is not exist
     uint count;
     QList<DataLayout> layouts;
+};
+
+struct ShaderUniform {
+    int location;
+    DataType type;
+};
+
+struct ShaderTexture {
+    int location;
+    DataType type;
+    uint index;
 };
 
 }
