@@ -17,7 +17,8 @@ enum DataType {
     Float3x3,
     Float4x4,
     Int,
-    UInt
+    UInt,
+    DataTypeMax
 };
 
 enum DataUsage {
@@ -25,11 +26,13 @@ enum DataUsage {
     normal,
     texCoord,
     color,
-    index
+    tangent,
+    bitangent,
+    DataUsageMax
 };
 
 enum UniformUsage {
-    viewProjMatrix,
+    viewProjMatrix = 0,
     modelMatrix,
     normalMatrix,
     viewMatrix,
@@ -41,6 +44,7 @@ enum UniformUsage {
     metallic,
     roughness,
     ao,
+    UniformUsageMax
 };
 
 enum TextureType {
@@ -92,7 +96,7 @@ struct ShaderUniform {
 
 struct ShaderTexture {
     int location;
-    DataType type;
+    TextureType type;
     uint index;
 };
 
