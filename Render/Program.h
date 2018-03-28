@@ -6,18 +6,37 @@
 #include <QString>
 #include <QVector>
 #include <QList>
+#include <QStringList>
+#include <QSharedPointer>
 
 #include "Interfaces.h"
+#include "GLSystem.h"
 
 namespace mtr {
 
+struct ProgramDescription {
+    QString vsFile;
+    QString fsFile;
+    QStringList macros;
+    QList<QString> attribs;
+    QMap<QString, TextureType> textures;
+    QMap<QString, DataType> uniforms;
+};
+
 class Program : public QObject {
-    static QMap<DataUsage, QString> AttribUsage2Name;
-    static QMap<UniformUsage, QString> UniformUsage2Name;
     Q_OBJECT
 
+private:
+    static QMap<DataUsage, QString> AttribUsage2Name;
+    static QMap<UniformUsage, QString> UniformUsage2Name;
+    static QMap<QString, DataUsage> AttribName2Usage;
+    static QMap<QString, UniformUsage> UniformName2Usage;
+
 public:
-    explicit Program(QObject *parent = nullptr);
+    static void InitNameMappings(void);
+
+public:
+    explicit Program(ProgramDescription &description, QSharedPointer<GLSystem> &glSystem, QObject *parent = nullptr);
     virtual ~Program(void);
 
 signals:
@@ -25,12 +44,23 @@ signals:
 public slots:
 
 public:
+    inline bool Valid(void) { return _glProgram != 0; }
+    inline const QList<QString> & SamplerNames(void) const { return _samplers.keys(); }
+    inline const QList<UniformUsage> & UniformUsages(void) const { return _uniforms.keys(); }
+
+    bool Use(void);
+    bool SetTexture(QString &name, uint texture, TextureType type);
+    bool SetUniform(UniformUsage usage, void *value, DataType type);
+    bool CheckAttribLocation(QList<int> &locations);
 
 private:
+    void Initialize(ProgramDescription &description);
+
+    QWeakPointer<GLSystem> _glSystemRef;
     uint _glProgram;
-    uint _attribCount;
-    QVector<int> _attribLocations;
-    QList<ShaderTexture> _samplers;
+    int _attribCount;
+    QVector<bool> _attribs;
+    QMap<QString, ShaderTexture> _samplers;
     QMap<UniformUsage, ShaderUniform> _uniforms;
 };
 
