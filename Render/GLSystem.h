@@ -12,8 +12,10 @@
 namespace mtr {
 
 class GLSystem : public QObject, public QOpenGLFunctions_3_3_Core {
-    static const char *ShaderVersion;
     Q_OBJECT
+
+private:
+    static const char *ShaderVersion;
 
 public:
     explicit GLSystem(QObject *parent = nullptr);
@@ -42,7 +44,6 @@ private:
     bool LoadShader(uint &shader, uint type, QByteArray &source, QByteArray &header);
     bool CreateBufferObject(uint &object, const void *data, int size, bool isElement);
 
-private:
     QString _vendor;
     QString _renderer;
     QString _version;

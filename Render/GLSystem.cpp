@@ -7,8 +7,8 @@ namespace mtr {
 
 const char * GLSystem::ShaderVersion = "#version 330 core";
 
-GLSystem::GLSystem(QObject *parent):
-QObject(parent)
+GLSystem::GLSystem(QObject *parent)
+: QObject(parent)
 {
     initializeOpenGLFunctions();
 }
@@ -164,7 +164,7 @@ bool GLSystem::LoadShader(uint &shader, uint type, QByteArray &source, QByteArra
     }
 
     shader = glCreateShader(type);
-    const char *data[2] = {header.constData(), source.constData()};
+    const char *data[2] = {header.data(), source.data()};
     glShaderSource(shader, 2, data, nullptr);
     glCompileShader(shader);
 
@@ -206,7 +206,7 @@ bool GLSystem::CreateProgram(uint &program, const QString &vsFile, const QString
     // assemble file header
     QByteArray header(ShaderVersion);
     header.push_back("\n");
-    foreach (const QString macro, macros) {
+    foreach (const QString &macro, macros) {
         header.push_back(macro.toUtf8());
         header.push_back("\n");
     }
@@ -264,11 +264,11 @@ bool GLSystem::CreateBufferObject(uint &object, const void *data, int size, bool
 }
 
 bool GLSystem::CreateBufferObject(uint &object, QVector<float> &data) {
-    return CreateBufferObject(object, data.constData(), data.size() * sizeof(float), false);
+    return CreateBufferObject(object, data.data(), data.size() * sizeof(float), false);
 }
 
 bool GLSystem::CreateBufferObject(uint &object, QVector<short> &data, bool isElement) {
-    return CreateBufferObject(object, data.constData(), data.size() * sizeof(short), isElement);
+    return CreateBufferObject(object, data.data(), data.size() * sizeof(short), isElement);
 }
 
 bool GLSystem::CreateVertexObjects(VertexInfo &vertex, FloatData &vertices, ShortData &indices) {
