@@ -4,8 +4,11 @@ namespace mtr {
 
 QMap<DataUsage, QString> Program::AttribUsage2Name;
 QMap<UniformUsage, QString> Program::UniformUsage2Name;
+QMap<TextureUsage, QString> Program::TextureUsage2Name;
+
 QMap<QString, DataUsage> Program::AttribName2Usage;
 QMap<QString, UniformUsage> Program::UniformName2Usage;
+QMap<QString, TextureUsage> Program::TextureName2Usage;
 
 void Program::InitNameMappings(void) {
     AttribUsage2Name[position] = "a_position";
@@ -28,6 +31,18 @@ void Program::InitNameMappings(void) {
     UniformUsage2Name[roughness] = "u_roughness";
     UniformUsage2Name[ao] = "u_ao";
 
+    TextureUsage2Name[normalMap] = "u_normalMap";
+    TextureUsage2Name[diffuseMap] = "u_diffuseMap";
+    TextureUsage2Name[specularMap] = "u_specularMap";
+    TextureUsage2Name[albedoMap] = "u_albedoMap";
+    TextureUsage2Name[metallicMap] = "u_metallicMap";
+    TextureUsage2Name[roughnessMap] = "u_roughnessMap";
+    TextureUsage2Name[aoMap] = "u_aoMap";
+    TextureUsage2Name[envCubeMap] = "u_envCubeMap";
+    TextureUsage2Name[envSphereMap] = "u_envSphereMap";
+    TextureUsage2Name[debug2DMap] = "u_debug2DMap";
+    TextureUsage2Name[debugCubeMap] = "u_debugCubeMap";
+
     AttribName2Usage["a_position"] = position;
     AttribName2Usage["a_normal"] = normal;
     AttribName2Usage["a_texCoord"] = texCoord;
@@ -47,6 +62,18 @@ void Program::InitNameMappings(void) {
     UniformName2Usage["u_metallic"] = metallic;
     UniformName2Usage["u_roughness"] = roughness;
     UniformName2Usage["u_ao"] = ao;
+
+    TextureName2Usage["u_normalMap"] = normalMap;
+    TextureName2Usage["u_diffuseMap"] = diffuseMap;
+    TextureName2Usage["u_specularMap"] = specularMap;
+    TextureName2Usage["u_albedoMap"] = albedoMap;
+    TextureName2Usage["u_metallicMap"] = metallicMap;
+    TextureName2Usage["u_roughnessMap"] = roughnessMap;
+    TextureName2Usage["u_aoMap"] = aoMap;
+    TextureName2Usage["u_envCubeMap"] = envCubeMap;
+    TextureName2Usage["u_envSphereMap"] = envSphereMap;
+    TextureName2Usage["u_debug2DMap"] = debug2DMap;
+    TextureName2Usage["u_debugCubeMap"] = debugCubeMap;
 }
 
 Program::Program(ProgramDescription &description, QSharedPointer<GLSystem> &glSystem, QObject *parent)
@@ -88,8 +115,9 @@ void Program::Initialize(ProgramDescription &description) {
             QByteArray cname = name.toUtf8();
             int location = glSystem->glGetUniformLocation(_glProgram, cname.data());
             if (location != -1) {
+                TextureUsage usage = TextureName2Usage[name];
                 ShaderTexture tex = {location, iter.value(), texIndex};
-                _samplers[cname] = tex;
+                _samplers[usage] = tex;
                 ++texIndex;
             } else {
                 qWarning("Program::Initialize sampler name %s not exist!", cname.data());
@@ -145,20 +173,15 @@ bool Program::Use(void) {
     return true;
 }
 
-bool Program::SetTexture(QString &name, uint texture, TextureType type) {
-    if (name.isEmpty()) {
+bool Program::SetTexture(TextureUsage usage, uint texture, TextureType type) {
+    if (_samplers.find(usage) == _samplers.end()) {
+        qWarning("Program::SetTexture sampler uniform %d not exist!", usage);
         return false;
     }
 
-    QByteArray cname = name.toUtf8();
-    if (_samplers.find(name) == _samplers.end()) {
-        qWarning("Program::SetTexture sampler uniform %s not exist!", cname.data());
-        return false;
-    }
-
-    ShaderTexture &tex = _samplers[name];
+    ShaderTexture &tex = _samplers[usage];
     if (tex.type != type) {
-        qWarning("Program::SetTexture texture %s type not matched!", cname.data());
+        qWarning("Program::SetTexture texture %d type not matched!", usage);
         return false;
     }
 
@@ -170,8 +193,8 @@ bool Program::SetTexture(QString &name, uint texture, TextureType type) {
     glSystem->glActiveTexture(GL_TEXTURE0 + tex.index);
 
     switch(tex.type) {
-      case Texture2D: glSystem->glBindTexture(GL_TEXTURE_2D, texture); break;
-      case TextureCube: glSystem->glBindTexture(GL_TEXTURE_CUBE_MAP, texture); break;
+      case texture2D: glSystem->glBindTexture(GL_TEXTURE_2D, texture); break;
+      case textureCube: glSystem->glBindTexture(GL_TEXTURE_CUBE_MAP, texture); break;
       default: qWarning("Program::SetTexture Invalid texture type!"); break;
     }
 

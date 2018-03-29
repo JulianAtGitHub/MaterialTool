@@ -29,8 +29,11 @@ class Program : public QObject {
 private:
     static QMap<DataUsage, QString> AttribUsage2Name;
     static QMap<UniformUsage, QString> UniformUsage2Name;
+    static QMap<TextureUsage, QString> TextureUsage2Name;
+
     static QMap<QString, DataUsage> AttribName2Usage;
     static QMap<QString, UniformUsage> UniformName2Usage;
+    static QMap<QString, TextureUsage> TextureName2Usage;
 
 public:
     static void InitNameMappings(void);
@@ -45,11 +48,11 @@ public slots:
 
 public:
     inline bool Valid(void) { return _glProgram != 0; }
-    inline const QList<QString> & SamplerNames(void) const { return _samplers.keys(); }
+    inline const QList<TextureUsage> & SamplerUsages(void) const { return _samplers.keys(); }
     inline const QList<UniformUsage> & UniformUsages(void) const { return _uniforms.keys(); }
 
     bool Use(void);
-    bool SetTexture(QString &name, uint texture, TextureType type);
+    bool SetTexture(TextureUsage usage, uint texture, TextureType type);
     bool SetUniform(UniformUsage usage, void *value, DataType type);
     bool CheckAttribLocation(QList<int> &locations);
 
@@ -60,7 +63,7 @@ private:
     uint _glProgram;
     int _attribCount;
     QVector<bool> _attribs;
-    QMap<QString, ShaderTexture> _samplers;
+    QMap<TextureUsage, ShaderTexture> _samplers;
     QMap<UniformUsage, ShaderUniform> _uniforms;
 };
 
