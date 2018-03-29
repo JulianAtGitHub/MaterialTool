@@ -32,14 +32,12 @@ SOURCES += \
     main.cpp \
     MTWindow.cpp \
     MTPreview.cpp \
-    MTFlowview.cpp \
     Render/GLSystem.cpp \
     Render/Program.cpp
 
 HEADERS += \
     MTWindow.h \
     MTPreview.h \
-    MTFlowview.h \
     Render/GLSystem.h \
     Render/Interfaces.h \
     Render/Program.h
