@@ -33,14 +33,16 @@ SOURCES += \
     MTWindow.cpp \
     MTPreview.cpp \
     Render/GLSystem.cpp \
-    Render/Program.cpp
+    Render/Program.cpp \
+    Render/Drawable.cpp
 
 HEADERS += \
     MTWindow.h \
     MTPreview.h \
     Render/GLSystem.h \
     Render/Interfaces.h \
-    Render/Program.h
+    Render/Program.h \
+    Render/Drawable.h
 
 FORMS += \
         MTWindow.ui
