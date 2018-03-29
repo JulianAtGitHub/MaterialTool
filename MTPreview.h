@@ -2,9 +2,8 @@
 #define MTPREVIEW_H
 
 #include <QOpenGLWidget>
-#include <QOpenGLFunctions_3_3_Core>
 
-class MTPreview : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
+class MTPreview : public QOpenGLWidget {
 
 public:
     MTPreview(QWidget * parent);

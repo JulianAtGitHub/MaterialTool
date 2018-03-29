@@ -26,6 +26,8 @@ signals:
 public slots:
 
 public:
+    void InitializeGL(void);
+
     bool CreateTexture(TextureInfo &textureInfo, const QString &imageFile, bool mipmaps = true);
     // mipmaps is disabled when load  from HDR image
     bool CreateHDRTexture(TextureInfo &textureInfo, const QString &imageFile);

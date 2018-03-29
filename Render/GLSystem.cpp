@@ -10,7 +10,7 @@ const char * GLSystem::ShaderVersion = "#version 330 core";
 GLSystem::GLSystem(QObject *parent)
 : QObject(parent)
 {
-    initializeOpenGLFunctions();
+
 }
 
 GLSystem::~GLSystem(void) {
@@ -31,6 +31,17 @@ void GLSystem::GetSystemInfo(void) {
     qInfo("version:      %s", _version.toUtf8().data());
     qInfo("glsl version: %s", _glslVersion.toUtf8().data());
     qInfo("extensions:   %s", extensions.toUtf8().data());
+}
+
+void GLSystem::InitializeGL(void) {
+    initializeOpenGLFunctions();
+
+    GetSystemInfo();
+
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClearDepth(1.0);
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LEQUAL);
 }
 
 bool GLSystem::CreateTexture(TextureInfo &textureInfo, const QString &imageFile, bool mipmaps) {
