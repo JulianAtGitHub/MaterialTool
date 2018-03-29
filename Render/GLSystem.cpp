@@ -94,7 +94,7 @@ bool GLSystem::CreateTexture(TextureInfo &textureInfo, const QString &imageFile,
     stbi_image_free(data);
 
     textureInfo.texture = texture;
-    textureInfo.type = Texture2D;
+    textureInfo.type = texture2D;
     textureInfo.width = width;
     textureInfo.height = height;
 
@@ -135,7 +135,7 @@ bool GLSystem::CreateHDRTexture(TextureInfo &textureInfo, const QString &imageFi
     stbi_image_free(data);
 
     textureInfo.texture = texture;
-    textureInfo.type = Texture2D;
+    textureInfo.type = texture2D;
     textureInfo.width = width;
     textureInfo.height = height;
 

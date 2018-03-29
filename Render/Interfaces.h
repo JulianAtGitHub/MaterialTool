@@ -2,8 +2,11 @@
 #define MTR_INTERFACES_H
 
 #include <QtGlobal>
+#include <QString>
 #include <QList>
 #include <QVector>
+#include <QByteArray>
+#include <QMap>
 
 namespace mtr {
 
@@ -37,6 +40,7 @@ enum UniformUsage {
     normalMatrix,
     viewMatrix,
     projMatrix,
+
     viewPos,
     lightPos,
     lightColor,
@@ -48,8 +52,35 @@ enum UniformUsage {
 };
 
 enum TextureType {
-    Texture2D,
-    TextureCube,
+    texture2D = 0,
+    textureCube,
+    TextureTypeMax
+};
+
+enum TextureUsage {
+    normalMap = 0,
+
+    diffuseMap,
+    specularMap,
+
+    albedoMap,
+    metallicMap,
+    roughnessMap,
+    aoMap,
+
+    envCubeMap,
+    envSphereMap,
+
+    debug2DMap,
+    debugCubeMap,
+    TextureUsageMax
+};
+
+enum PrimitiveType {
+    TriangleList = 0,
+    TriangleStrip,
+    TriangleFan,
+    PrimitiveTypeMax
 };
 
 struct TextureInfo {
@@ -98,6 +129,18 @@ struct ShaderTexture {
     int location;
     TextureType type;
     uint index;
+};
+
+struct Mesh {
+    QByteArray vertices;
+    QByteArray indices;
+    PrimitiveType type;
+};
+
+struct Model {
+    Mesh mesh;
+    QMap<TextureUsage, QString> textures;
+    QMap<UniformUsage, QByteArray> propeties;
 };
 
 }
