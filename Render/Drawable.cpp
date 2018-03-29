@@ -1,4 +1,6 @@
 #include "Drawable.h"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtc/matrix_inverse.hpp"
 
 namespace mtr {
 
@@ -12,6 +14,10 @@ Drawable::Drawable(Model &model, QSharedPointer<GLSystem> &glSystem, QObject *pa
     LoadVertices(model, glSystem);
     LoadTextures(model, glSystem);
     _values = model.values;
+}
+
+Drawable::~Drawable(void) {
+
 }
 
 void Drawable::LoadVertices(Model &model, QSharedPointer<GLSystem> &glSystem) {
@@ -36,17 +42,16 @@ void Drawable::LoadTextures(Model &model, QSharedPointer<GLSystem> &glSystem) {
 }
 
 void Drawable::CalculateMatrixes(void) {
-    _modelMatrix.setToIdentity();
-    _modelMatrix.scale(_scale);
-    _modelMatrix.rotate(_rotation.x(), QVector3D(1.0f, 0.0f, 0.0f));
-    _modelMatrix.rotate(_rotation.y(), QVector3D(0.0f, 1.0f, 0.0f));
-    _modelMatrix.rotate(_rotation.z(), QVector3D(0.0f, 0.0f, 1.0f));
-    _modelMatrix.translate(_position);
+    _modelMatrix = glm::scale(glm::mat4(), _scale);
+    _modelMatrix = glm::rotate(_modelMatrix, _rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
+    _modelMatrix = glm::rotate(_modelMatrix, _rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
+    _modelMatrix = glm::rotate(_modelMatrix, _rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
+    _modelMatrix = glm::translate(_modelMatrix, _position);
 
-    _normalMatrix = _modelMatrix.normalMatrix();
+    _normalMatrix = glm::mat3(glm::inverseTranspose(_modelMatrix));
 }
 
-const QMatrix4x4 & Drawable::ModelMatrix(void) {
+const glm::mat4 & Drawable::ModelMatrix(void) {
     if (_isDirty) {
         CalculateMatrixes();
         this->_isDirty = false;
@@ -54,7 +59,7 @@ const QMatrix4x4 & Drawable::ModelMatrix(void) {
     return _modelMatrix;
 }
 
-const QMatrix3x3 & Drawable::NormalMatrix(void) {
+const glm::mat3 & Drawable::NormalMatrix(void) {
     if (_isDirty) {
         CalculateMatrixes();
         this->_isDirty = false;
@@ -62,17 +67,17 @@ const QMatrix3x3 & Drawable::NormalMatrix(void) {
     return _normalMatrix;
 }
 
-void Drawable::Move(QVector3D &t) {
+void Drawable::Move(glm::vec3 &t) {
     _position += t;
     this->_isDirty = true;
 }
 
-void Drawable::Rotate(QVector3D &r) {
+void Drawable::Rotate(glm::vec3 &r) {
     _rotation += r;
     this->_isDirty = true;
 }
 
-void Drawable::Scale(QVector3D &s) {
+void Drawable::Scale(glm::vec3 &s) {
     _scale += s;
     this->_isDirty = true;
 }

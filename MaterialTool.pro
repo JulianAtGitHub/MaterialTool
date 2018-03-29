@@ -34,7 +34,8 @@ SOURCES += \
     MTPreview.cpp \
     Render/GLSystem.cpp \
     Render/Program.cpp \
-    Render/Drawable.cpp
+    Render/Drawable.cpp \
+    Render/Camera.cpp
 
 HEADERS += \
     MTWindow.h \
@@ -42,7 +43,8 @@ HEADERS += \
     Render/GLSystem.h \
     Render/Interfaces.h \
     Render/Program.h \
-    Render/Drawable.h
+    Render/Drawable.h \
+    Render/Camera.h
 
 FORMS += \
         MTWindow.ui
