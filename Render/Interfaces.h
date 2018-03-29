@@ -117,6 +117,7 @@ struct VertexInfo {
     // Element count if ebo is exist
     // Vertex count if ebo is not exist
     uint count;
+    PrimitiveType mode;
     QList<DataLayout> layouts;
 };
 
@@ -132,15 +133,15 @@ struct ShaderTexture {
 };
 
 struct Mesh {
-    QByteArray vertices;
-    QByteArray indices;
-    PrimitiveType type;
+    FloatData vertices;
+    ShortData indices;
+    PrimitiveType mode;
 };
 
 struct Model {
     Mesh mesh;
     QMap<TextureUsage, QString> textures;
-    QMap<UniformUsage, QByteArray> propeties;
+    QMap<UniformUsage, QByteArray> values;
 };
 
 }
