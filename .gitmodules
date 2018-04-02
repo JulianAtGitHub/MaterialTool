@@ -4,3 +4,6 @@
 [submodule "Vendors/stb"]
 	path = Vendors/stb
 	url = git@github.com:nothings/stb.git
+[submodule "Vendors/glfw"]
+	path = Vendors/glfw
+	url = git@github.com:glfw/glfw.git
