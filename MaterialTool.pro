@@ -25,26 +25,16 @@ DEFINES += QT_DEPRECATED_WARNINGS
 DEFINES += STB_IMAGE_IMPLEMENTATION
 
 INCLUDEPATH += \
-    $$PWD/Vendors/glm \
     $$PWD/Vendors/stb
 
 SOURCES += \
     main.cpp \
     MTWindow.cpp \
-    MTPreview.cpp \
-    Render/GLSystem.cpp \
-    Render/Program.cpp \
-    Render/Drawable.cpp \
-    Render/Camera.cpp
+    MTPreview.cpp 
 
 HEADERS += \
     MTWindow.h \
-    MTPreview.h \
-    Render/GLSystem.h \
-    Render/Interfaces.h \
-    Render/Program.h \
-    Render/Drawable.h \
-    Render/Camera.h
+    MTPreview.h 
 
 FORMS += \
         MTWindow.ui
