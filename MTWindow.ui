@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1024</width>
-    <height>512</height>
+    <height>768</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -19,27 +19,9 @@
   <property name="windowTitle">
    <string>MTWindow</string>
   </property>
-  <widget class="QWidget" name="centralWidget">
-   <widget class="MTPreview" name="Preview">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>640</width>
-      <height>480</height>
-     </rect>
-    </property>
-   </widget>
-  </widget>
+  <widget class="QWidget" name="centralWidget"/>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <customwidgets>
-  <customwidget>
-   <class>MTPreview</class>
-   <extends>QOpenGLWidget</extends>
-   <header>MTPreview.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

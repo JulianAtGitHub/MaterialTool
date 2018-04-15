@@ -29,12 +29,10 @@ INCLUDEPATH += \
 
 SOURCES += \
     main.cpp \
-    MTWindow.cpp \
-    MTPreview.cpp 
+    MTWindow.cpp
 
 HEADERS += \
-    MTWindow.h \
-    MTPreview.h 
+    MTWindow.h
 
 FORMS += \
         MTWindow.ui
