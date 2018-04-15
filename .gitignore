@@ -44,3 +44,11 @@ CMakeLists.txt.user*
 
 # Preview Builds
 Preview/build
+
+# Xcode
+
+## User settings
+xcuserdata/
+
+## Build temps
+Preview/MacOS/Build
