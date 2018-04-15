@@ -1,25 +1,17 @@
-#ifndef CAMERA_H
-#define CAMERA_H
-
-#include <QObject>
+#ifndef MTP_CAMERA_H
+#define MTP_CAMERA_H
 
 #include "glm/vec3.hpp"
 #include "glm/mat4x4.hpp"
 
-namespace mtr {
+namespace mtp {
 
-class Camera : public QObject {
-    Q_OBJECT
+class Camera  {
 
 public:
-    explicit Camera(float fov, float aspect, QObject *parent = nullptr);
+    explicit Camera(float fov, float aspect);
     virtual ~Camera(void);
 
-signals:
-
-public slots:
-
-public:
     inline const glm::vec3 & Eye(void) const { return _eye; }
     inline const glm::vec3 & LookAt(void) const { return _lookAt; }
     inline const glm::vec3 & Up(void) const { return _up; }
@@ -31,9 +23,15 @@ public:
     const glm::mat4 & ViewMatrix(void);
     const glm::mat4 & ProjMatrix(void);
     const glm::mat4 & ViewPorjMatrix(void);
+    
+    // input
+    void OnMouseDown(float x, float y);
+    void OnMouseUp(void);
+    void OnMouseDrag(float deltaX, float deltaY);
 
 private:
     void CalculateMatrixes(void);
+    void UpdateRotation(void);
 
     glm::vec3 _eye;
     glm::vec3 _lookAt;
@@ -46,9 +44,15 @@ private:
     glm::mat4 _viewMatrix;
     glm::mat4 _projMatrix;
     glm::mat4 _viewProjMatrix;
+    
+    // input
+    bool _mouseDown;
+    float _xRotation;
+    float _yRotation;
+    
     bool _isDirty;
 };
 
 }
 
-#endif // CAMERA_H
+#endif // MTP_CAMERA_H

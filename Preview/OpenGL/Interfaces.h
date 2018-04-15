@@ -1,14 +1,20 @@
-#ifndef MTR_INTERFACES_H
-#define MTR_INTERFACES_H
+#ifndef MTP_INTERFACES_H
+#define MTP_INTERFACES_H
 
-#include <QtGlobal>
-#include <QString>
-#include <QList>
-#include <QVector>
-#include <QByteArray>
-#include <QMap>
+#include <string>
+#include <vector>
+#include <list>
+#include <map>
+#include <memory>
 
-namespace mtr {
+#include "glm/vec3.hpp"
+
+using namespace std;
+
+namespace mtp {
+    
+typedef unsigned int uint;
+typedef unsigned char uchar;
 
 enum DataType {
     Unknown = 0,
@@ -21,6 +27,7 @@ enum DataType {
     Float4x4,
     Int,
     UInt,
+    Short,
     DataTypeMax
 };
 
@@ -48,6 +55,8 @@ enum UniformUsage {
     metallic,
     roughness,
     ao,
+    
+    resolution,
     UniformUsageMax
 };
 
@@ -67,6 +76,10 @@ enum TextureUsage {
     metallicMap,
     roughnessMap,
     aoMap,
+    
+    irradianceMap,
+    prefilterMap,
+    brdfMap,
 
     envCubeMap,
     envSphereMap,
@@ -94,20 +107,11 @@ struct DataLayout {
     DataType type;
     DataUsage usage;
 };
-
-struct FloatData {
-    QVector<float> data;
-    QList<DataLayout> layouts;
-};
-
-struct ShortData {
-    QVector<short> data;
-    QList<DataLayout> layouts;
-};
-
-struct IntData {
-    QVector<int> data;
-    QList<DataLayout> layouts;
+    
+template <class _Tp>
+struct Data {
+    vector<_Tp> data;
+    list<DataLayout> layouts;
 };
 
 struct VertexInfo {
@@ -118,7 +122,24 @@ struct VertexInfo {
     // Vertex count if ebo is not exist
     uint count;
     PrimitiveType mode;
-    QList<DataLayout> layouts;
+    list<DataLayout> layouts;
+};
+
+struct Mesh {
+    Data<float> vertices;
+    vector<short> indices;
+    PrimitiveType mode;
+};
+
+struct Model {
+    VertexInfo mesh;
+    map<TextureUsage, string> textures;
+    map<UniformUsage, shared_ptr<void> > values;
+};
+
+struct LightInfo {
+    glm::vec3 position;
+    glm::vec3 color;
 };
 
 struct ShaderUniform {
@@ -132,18 +153,6 @@ struct ShaderTexture {
     uint index;
 };
 
-struct Mesh {
-    FloatData vertices;
-    ShortData indices;
-    PrimitiveType mode;
-};
-
-struct Model {
-    Mesh mesh;
-    QMap<TextureUsage, QString> textures;
-    QMap<UniformUsage, QByteArray> values;
-};
-
 }
 
-#endif // MTR_INTERFACES_H
+#endif // MTP_INTERFACES_H
