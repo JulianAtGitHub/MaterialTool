@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>mainWindow</class>
+ <widget class="QMainWindow" name="mainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1024</width>
+    <height>768</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>MTWindow</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QFrame { 
+	background-color: rgb(100,100,100); 
+	border: 1px solid rgb(90,70,30); 
+}
+QFrame#sideBar {
+	background-color: rgb(50,50,50); 
+	border: 1px solid rgb(255,255,255); 
+}
+#nodeView {
+	background-color: rgb(80,80,80); 
+}
+</string>
+  </property>
+  <widget class="QFrame" name="centralWidget">
+   <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <item>
+     <widget class="MTNodeView" name="nodeView">
+      <property name="sceneRect">
+       <rectf>
+        <x>0.000000000000000</x>
+        <y>0.000000000000000</y>
+        <width>0.000000000000000</width>
+        <height>0.000000000000000</height>
+       </rectf>
+      </property>
+      <property name="transformationAnchor">
+       <enum>QGraphicsView::AnchorUnderMouse</enum>
+      </property>
+      <property name="viewportUpdateMode">
+       <enum>QGraphicsView::SmartViewportUpdate</enum>
+      </property>
+     </widget>
+    </item>
+    <item alignment="Qt::AlignVCenter">
+     <widget class="MTSideBar" name="sideBar">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>200</width>
+        <height>744</height>
+       </size>
+      </property>
+      <property name="baseSize">
+       <size>
+        <width>0</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QPushButton" name="addBoxBtn">
+         <property name="text">
+          <string>Add Box</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>MTSideBar</class>
+   <extends>QFrame</extends>
+   <header>MTSideBar.h</header>
+   <container>1</container>
+   <slots>
+    <slot>onAddBoxClicked()</slot>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>MTNodeView</class>
+   <extends>QGraphicsView</extends>
+   <header>MTNodeView.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>addBoxBtn</sender>
+   <signal>clicked()</signal>
+   <receiver>sideBar</receiver>
+   <slot>onAddBoxClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>910</x>
+     <y>386</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>910</x>
+     <y>384</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

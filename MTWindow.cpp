@@ -1,13 +1,15 @@
+#include "ui_MainWindow.h"
 #include "MTWindow.h"
-#include "ui_MTWindow.h"
 
-MTWindow::MTWindow(QWidget *parent) :
-QMainWindow(parent),
-ui(new Ui::MTWindow)
+MTWindow::MTWindow(QWidget *parent)
+: QMainWindow(parent)
 {
-    ui->setupUi(this);
+    _ui = new Ui::mainWindow;
+    _ui->setupUi(this);
+
+    _ui->nodeView->initSceneUi();
 }
 
-MTWindow::~MTWindow() {
-    delete ui;
+MTWindow::~MTWindow(void) {
+
 }

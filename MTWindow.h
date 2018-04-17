@@ -3,19 +3,25 @@
 
 #include <QMainWindow>
 
+class QFrame;
+class QGraphicsScene;
+
+class MTNodeView;
+class MTSideBar;
+
 namespace Ui {
-class MTWindow;
+    class mainWindow;
 }
 
 class MTWindow : public QMainWindow {
     Q_OBJECT
 
 public:
-    explicit MTWindow(QWidget *parent = 0);
-    ~MTWindow();
+    explicit MTWindow(QWidget *parent = Q_NULLPTR);
+    virtual ~MTWindow(void);
 
 private:
-    Ui::MTWindow *ui;
+    Ui::mainWindow *_ui;
 };
 
 #endif // MTWINDOW_H
