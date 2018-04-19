@@ -4,10 +4,10 @@
 MTWindow::MTWindow(QWidget *parent)
 : QMainWindow(parent)
 {
-    _ui = new Ui::mainWindow;
-    _ui->setupUi(this);
+    ui = new Ui::mainWindow;
+    ui->setupUi(this);
 
-    _ui->nodeView->initSceneUi();
+    ui->nodeView->initSceneUi();
 }
 
 MTWindow::~MTWindow(void) {

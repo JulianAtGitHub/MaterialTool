@@ -2,7 +2,6 @@
 #define MTNODEVIEW_H
 
 #include <QGraphicsView>
-#include <QGraphicsScene>
 
 class MTNodeView : public QGraphicsView {
     Q_OBJECT
@@ -12,6 +11,16 @@ public:
     virtual ~MTNodeView(void);
 
     void initSceneUi(void);
+
+protected:
+    void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+    void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+    void mouseReleaseEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+    void wheelEvent(QWheelEvent *event) Q_DECL_OVERRIDE;
+
+private:
+    bool isDragging;
+    QPoint prevPos;
 };
 
 #endif // MTNODEVIEW_H

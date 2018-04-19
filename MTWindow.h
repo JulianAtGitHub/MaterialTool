@@ -21,7 +21,7 @@ public:
     virtual ~MTWindow(void);
 
 private:
-    Ui::mainWindow *_ui;
+    Ui::mainWindow *ui;
 };
 
 #endif // MTWINDOW_H
