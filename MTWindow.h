@@ -20,6 +20,8 @@ public:
     explicit MTWindow(QWidget *parent = Q_NULLPTR);
     virtual ~MTWindow(void);
 
+    const MTNodeView * nodeView(void) const;
+
 private:
     Ui::mainWindow *ui;
 };

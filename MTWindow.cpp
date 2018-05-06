@@ -13,3 +13,7 @@ MTWindow::MTWindow(QWidget *parent)
 MTWindow::~MTWindow(void) {
 
 }
+
+const MTNodeView * MTWindow::nodeView(void) const {
+    return ui->nodeView;
+}

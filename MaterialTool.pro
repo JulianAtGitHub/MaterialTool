@@ -31,12 +31,18 @@ SOURCES += \
     main.cpp \
     MTWindow.cpp \
     MTNodeView.cpp \
-    MTSideBar.cpp
+    MTSideBar.cpp \
+    MTNodeLine.cpp \
+    MTNodeSocket.cpp \
+    MTNodeItem.cpp
 
 HEADERS += \
     MTWindow.h \
     MTNodeView.h \
-    MTSideBar.h
+    MTSideBar.h \
+    MTNodeLine.h \
+    MTNodeSocket.h \
+    MTNodeItem.h
 
 FORMS += \
         MainWindow.ui
